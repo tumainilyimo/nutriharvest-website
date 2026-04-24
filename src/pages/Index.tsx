@@ -5,6 +5,7 @@ import { Clock, Leaf, MapPin, ArrowRight } from "lucide-react"
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
 import { nutriHarvestContent } from "../data/content"
+import GrainFieldBackground from "../components/GrainFieldBackground"
 
 // Helper map to convert string names to components
 const iconMap: Record<string, React.ReactNode> = {
@@ -20,7 +21,8 @@ export default function Index() {
     <div className="flex flex-col animate-in fade-in duration-500">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-background pt-24 pb-32">
-        <div className="absolute inset-0 bg-primary/5 pattern-diagonal-lines opacity-20 pointer-events-none" />
+        <GrainFieldBackground className="absolute inset-0 h-full w-full pointer-events-none opacity-75" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/10 to-background/80 pointer-events-none" />
         <div className="container mx-auto px-4 sm:px-8 text-center max-w-4xl relative z-10">
           <motion.h1 
             className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground mb-8"
