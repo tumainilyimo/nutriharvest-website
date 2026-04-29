@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom"
-import ComingSoon from "./pages/ComingSoon"
+import LandingPage from "./pages/LandingPage"
 
 export const router = createBrowserRouter([
   {
     path: "/*",
-    element: <ComingSoon />
-  }
+    element: <LandingPage />,
+  },
 ])
