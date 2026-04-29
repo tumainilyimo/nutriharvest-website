@@ -135,16 +135,40 @@ export default function LandingPage() {
     <div className="min-h-screen overflow-hidden bg-[#fff9eb] text-slate-950">
       <motion.div className="fixed left-0 right-0 top-0 z-[80] h-1 origin-left bg-gradient-to-r from-emerald-700 via-orange-500 to-lime-500" style={{ scaleX }} />
 
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/50 bg-[#fff9eb]/75 backdrop-blur-2xl">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8" aria-label="Primary navigation">
-          <a href="#top" className="flex items-center gap-4" aria-label="NutriHarvest home">
-            <img src={logo} alt="NutriHarvest Agri-Food Processing logo" className="h-16 w-auto md:h-[4.75rem]" />
-            <div className="hidden sm:block">
-              <p className="text-base font-black uppercase tracking-[0.32em] text-emerald-950 md:text-lg">NutriHarvest</p>
-              <p className="text-sm font-semibold text-emerald-800/70">Agri-food processing</p>
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/50 bg-[#fff9eb]/85 shadow-sm shadow-emerald-950/5 backdrop-blur-2xl">
+        <nav className="mx-auto max-w-7xl px-4 py-3 md:px-8 md:py-4" aria-label="Primary navigation">
+          <div className="flex items-center justify-between gap-3">
+            <a href="#top" className="flex min-w-0 items-center gap-3 sm:gap-4" aria-label="NutriHarvest home">
+              <img src={logo} alt="NutriHarvest Agri-Food Processing logo" className="h-14 w-auto sm:h-16 md:h-[4.75rem]" />
+              <div className="hidden sm:block">
+                <p className="text-base font-black uppercase tracking-[0.32em] text-emerald-950 md:text-lg">NutriHarvest</p>
+                <p className="text-sm font-semibold text-emerald-800/70">Agri-food processing</p>
+              </div>
+            </a>
+            <div className="hidden items-center gap-2 rounded-full border border-emerald-900/10 bg-white/55 p-1 text-sm font-bold text-slate-700 shadow-sm shadow-emerald-950/5 backdrop-blur-xl md:flex">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id
+
+                return (
+                  <a
+                    key={item.id}
+                    href={`#${item.id}`}
+                    className={`rounded-full px-4 py-2.5 transition-all duration-300 ${
+                      isActive
+                        ? "bg-emerald-900 text-white shadow-lg shadow-emerald-950/15"
+                        : "text-slate-700 hover:bg-white hover:text-emerald-900"
+                    }`}
+                  >
+                    {item.label}
+                  </a>
+                )
+              })}
             </div>
-          </a>
-          <div className="hidden items-center gap-2 rounded-full border border-emerald-900/10 bg-white/55 p-1 text-sm font-bold text-slate-700 shadow-sm shadow-emerald-950/5 backdrop-blur-xl md:flex">
+            <Button asChild className="shrink-0 rounded-full bg-emerald-800 px-4 text-sm text-white shadow-lg shadow-emerald-900/20 hover:bg-emerald-900 sm:px-5 sm:text-base">
+              <a href={`mailto:${contact.email}`}>Contact</a>
+            </Button>
+          </div>
+          <div className="mt-3 flex gap-2 overflow-x-auto rounded-full border border-emerald-900/10 bg-white/65 p-1 text-xs font-bold text-slate-700 shadow-sm shadow-emerald-950/5 backdrop-blur-xl md:hidden">
             {navItems.map((item) => {
               const isActive = activeSection === item.id
 
@@ -152,9 +176,9 @@ export default function LandingPage() {
                 <a
                   key={item.id}
                   href={`#${item.id}`}
-                  className={`rounded-full px-4 py-2.5 transition-all duration-300 ${
+                  className={`shrink-0 rounded-full px-3.5 py-2 transition-all duration-300 ${
                     isActive
-                      ? "bg-emerald-900 text-white shadow-lg shadow-emerald-950/15"
+                      ? "bg-emerald-900 text-white shadow-md shadow-emerald-950/15"
                       : "text-slate-700 hover:bg-white hover:text-emerald-900"
                   }`}
                 >
@@ -163,14 +187,11 @@ export default function LandingPage() {
               )
             })}
           </div>
-          <Button asChild className="rounded-full bg-emerald-800 px-5 text-white shadow-lg shadow-emerald-900/20 hover:bg-emerald-900">
-            <a href={`mailto:${contact.email}`}>Contact</a>
-          </Button>
         </nav>
       </header>
 
       <main id="top">
-        <section className="relative min-h-screen overflow-hidden px-5 pb-20 pt-32 md:px-8 md:pt-40">
+        <section className="relative min-h-screen overflow-hidden px-5 pb-20 pt-44 sm:pt-48 md:px-8 md:pt-40">
           <div className="absolute left-1/2 top-0 h-[42rem] w-[42rem] -translate-x-1/2 rounded-full bg-lime-200/30 blur-3xl" />
           <div className="absolute -right-32 bottom-0 h-[30rem] w-[30rem] rounded-full bg-orange-200/50 blur-3xl" />
 
@@ -181,7 +202,7 @@ export default function LandingPage() {
                 {hero.eyebrow} · {product.netWeight}
               </motion.div>
 
-              <motion.h1 variants={fadeUp} className="font-display text-6xl font-black leading-[0.88] tracking-[-0.08em] text-emerald-950 sm:text-7xl md:text-8xl lg:text-9xl">
+              <motion.h1 variants={fadeUp} className="font-display text-5xl font-black leading-[0.88] tracking-[-0.08em] text-emerald-950 sm:text-7xl md:text-8xl lg:text-9xl">
                 {hero.headline}
               </motion.h1>
 
@@ -190,13 +211,13 @@ export default function LandingPage() {
               </motion.p>
 
               <motion.div variants={fadeUp} className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <Button asChild size="lg" className="group h-14 rounded-full bg-emerald-800 px-7 text-base text-white shadow-2xl shadow-emerald-900/20 hover:bg-emerald-900">
+                <Button asChild size="lg" className="group h-14 w-full rounded-full bg-emerald-800 px-7 text-base text-white shadow-2xl shadow-emerald-900/20 hover:bg-emerald-900 sm:w-auto">
                   <a href="#product">
                     {hero.primaryCTA}
                     <ArrowRight className="ml-2 h-5 w-5 transition group-hover:translate-x-1" />
                   </a>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="h-14 rounded-full border-emerald-900/15 bg-white/70 px-7 text-base text-emerald-950 backdrop-blur hover:bg-white">
+                <Button asChild size="lg" variant="outline" className="h-14 w-full rounded-full border-emerald-900/15 bg-white/70 px-7 text-base text-emerald-950 backdrop-blur hover:bg-white sm:w-auto">
                   <a href="#nutrition">{hero.secondaryCTA}</a>
                 </Button>
               </motion.div>
