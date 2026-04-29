@@ -1,3 +1,4 @@
+import { useEffect, type ReactNode, useState } from "react"
 import { motion, useScroll, useSpring, useTransform } from "framer-motion"
 import {
   ArrowRight,
@@ -41,8 +42,14 @@ const iconClass = "h-5 w-5"
 
 const highlightIcons = [Blend, Zap, Clock3, ShieldCheck]
 const ingredientIcons = [Wheat, Bean, Sprout, Leaf, Sparkles]
+const navItems = [
+  { label: "Product", id: "product" },
+  { label: "Nutrition", id: "nutrition" },
+  { label: "Preparation", id: "prepare" },
+  { label: "Story", id: "story" },
+]
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionLabel({ children }: { children: ReactNode }) {
   return (
     <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.28em] text-emerald-800 shadow-sm shadow-emerald-950/5 backdrop-blur">
       <span className="h-2 w-2 rounded-full bg-orange-500" />
@@ -85,29 +92,64 @@ function ProductAura() {
 
 export default function LandingPage() {
   const { brand, contact, hero, mission, product, products, services, values } = nutriHarvestContent
+  const [activeSection, setActiveSection] = useState("product")
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 })
   const productY = useTransform(scrollYProgress, [0, 0.5], [0, -70])
   const productRotate = useTransform(scrollYProgress, [0, 0.5], [0, -3])
+
+  useEffect(() => {
+    const sections = navItems
+      .map((item) => document.getElementById(item.id))
+      .filter((section): section is HTMLElement => section !== null)
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries.find((entry) => entry.isIntersecting)
+
+        if (visibleEntry) {
+          setActiveSection(visibleEntry.target.id)
+        }
+      },
+      { rootMargin: "-35% 0px -50% 0px", threshold: 0.01 },
+    )
+
+    sections.forEach((section) => observer.observe(section))
+
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#fff9eb] text-slate-950">
       <motion.div className="fixed left-0 right-0 top-0 z-[80] h-1 origin-left bg-gradient-to-r from-emerald-700 via-orange-500 to-lime-500" style={{ scaleX }} />
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/50 bg-[#fff9eb]/75 backdrop-blur-2xl">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 md:px-8" aria-label="Primary navigation">
-          <a href="#top" className="flex items-center gap-3" aria-label="NutriHarvest home">
-            <img src={logo} alt="NutriHarvest Agri-Food Processing logo" className="h-12 w-auto" />
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8" aria-label="Primary navigation">
+          <a href="#top" className="flex items-center gap-4" aria-label="NutriHarvest home">
+            <img src={logo} alt="NutriHarvest Agri-Food Processing logo" className="h-16 w-auto md:h-[4.75rem]" />
             <div className="hidden sm:block">
-              <p className="text-sm font-black uppercase tracking-[0.28em] text-emerald-950">NutriHarvest</p>
-              <p className="text-xs font-semibold text-emerald-800/70">Agri-food processing</p>
+              <p className="text-base font-black uppercase tracking-[0.32em] text-emerald-950 md:text-lg">NutriHarvest</p>
+              <p className="text-sm font-semibold text-emerald-800/70">Agri-food processing</p>
             </div>
           </a>
-          <div className="hidden items-center gap-7 text-sm font-semibold text-slate-700 md:flex">
-            <a href="#product" className="transition hover:text-emerald-800">Product</a>
-            <a href="#nutrition" className="transition hover:text-emerald-800">Nutrition</a>
-            <a href="#prepare" className="transition hover:text-emerald-800">Preparation</a>
-            <a href="#story" className="transition hover:text-emerald-800">Story</a>
+          <div className="hidden items-center gap-2 rounded-full border border-emerald-900/10 bg-white/55 p-1 text-sm font-bold text-slate-700 shadow-sm shadow-emerald-950/5 backdrop-blur-xl md:flex">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id
+
+              return (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className={`rounded-full px-4 py-2.5 transition-all duration-300 ${
+                    isActive
+                      ? "bg-emerald-900 text-white shadow-lg shadow-emerald-950/15"
+                      : "text-slate-700 hover:bg-white hover:text-emerald-900"
+                  }`}
+                >
+                  {item.label}
+                </a>
+              )
+            })}
           </div>
           <Button asChild className="rounded-full bg-emerald-800 px-5 text-white shadow-lg shadow-emerald-900/20 hover:bg-emerald-900">
             <a href={`mailto:${contact.email}`}>Contact</a>
