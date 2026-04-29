@@ -49,6 +49,96 @@ const navItems = [
   { label: "Story", id: "story" },
 ]
 
+function PatternTile({ flipped = false }: { flipped?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 72 144"
+      className={`h-36 w-full ${flipped ? "scale-x-[-1]" : ""}`}
+      aria-hidden="true"
+    >
+      <rect width="72" height="144" rx="24" fill="#fff4d6" opacity="0.76" />
+      <path d="M8 0v144M64 0v144" stroke="#f97316" strokeWidth="5" strokeDasharray="18 10" opacity="0.85" />
+      <path d="M22 0v144M50 0v144" stroke="#0f766e" strokeWidth="9" opacity="0.76" />
+      <circle cx="36" cy="24" r="13" fill="#f97316" opacity="0.92" />
+      <circle cx="36" cy="24" r="22" fill="none" stroke="#111827" strokeWidth="4" opacity="0.72" />
+      <path d="M26 56h20l-10 19z" fill="#111827" opacity="0.82" />
+      <path d="M24 72c10-8 14-8 24 0" stroke="#facc15" strokeWidth="5" strokeLinecap="round" />
+      <path d="M36 84v42" stroke="#14532d" strokeWidth="4" strokeLinecap="round" />
+      <path d="M36 98c-12-7-17-15-17-25 11 3 17 10 17 25ZM36 113c12-7 17-15 17-25-11 3-17 10-17 25Z" fill="#16a34a" opacity="0.78" />
+      <path d="M18 130h36" stroke="#111827" strokeWidth="5" strokeLinecap="round" />
+      {Array.from({ length: 5 }).map((_, index) => (
+        <circle key={index} cx={14 + index * 11} cy="136" r="2.5" fill="#111827" opacity="0.82" />
+      ))}
+    </svg>
+  )
+}
+
+function HeritageRail({ side }: { side: "left" | "right" }) {
+  return (
+    <div
+      className={`pointer-events-none fixed top-28 z-20 hidden h-[calc(100vh-7rem)] w-16 overflow-hidden xl:block ${
+        side === "left" ? "left-3" : "right-3"
+      }`}
+      aria-hidden="true"
+    >
+      <div className="h-full rounded-full border border-black/5 bg-white/25 p-1 shadow-xl shadow-emerald-950/5 backdrop-blur-sm">
+        <div className="heritage-rail-flow flex flex-col items-center gap-2">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <PatternTile key={index} flipped={side === "right"} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function HeritageWash({ className = "" }: { className?: string }) {
+  return (
+    <div className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} aria-hidden="true">
+      <svg className="absolute -left-24 top-24 h-[28rem] w-[28rem] text-emerald-950/10" viewBox="0 0 420 420" fill="none">
+        <circle cx="210" cy="210" r="164" stroke="currentColor" strokeWidth="2" strokeDasharray="3 17" />
+        <circle cx="210" cy="210" r="96" stroke="currentColor" strokeWidth="18" strokeDasharray="9 22" />
+        {Array.from({ length: 14 }).map((_, index) => {
+          const angle = (index * Math.PI * 2) / 14
+          const x = 210 + Math.cos(angle) * 136
+          const y = 210 + Math.sin(angle) * 136
+
+          return (
+            <path
+              key={index}
+              d={`M${x} ${y - 16}c16 11 21 25 0 40-21-15-16-29 0-40Z`}
+              fill="currentColor"
+              opacity="0.72"
+              transform={`rotate(${(angle * 180) / Math.PI + 90} ${x} ${y})`}
+            />
+          )
+        })}
+        <path d="M150 218c34 36 86 36 120 0" stroke="currentColor" strokeWidth="14" strokeLinecap="round" />
+        <path d="M158 194h104" stroke="currentColor" strokeWidth="10" strokeLinecap="round" />
+      </svg>
+      <svg className="absolute -right-20 bottom-10 h-[24rem] w-[24rem] text-orange-600/10" viewBox="0 0 360 360" fill="none">
+        <path d="M180 24v312" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+        {Array.from({ length: 9 }).map((_, index) => {
+          const y = 58 + index * 30
+
+          return (
+            <g key={index}>
+              <ellipse cx="158" cy={y} rx="14" ry="27" fill="currentColor" transform={`rotate(-34 158 ${y})`} />
+              <ellipse cx="202" cy={y} rx="14" ry="27" fill="currentColor" transform={`rotate(34 202 ${y})`} />
+            </g>
+          )
+        })}
+      </svg>
+    </div>
+  )
+}
+
+function HeritageDivider() {
+  return (
+    <div className="heritage-divider pointer-events-none h-5 w-full" aria-hidden="true" />
+  )
+}
+
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
     <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.28em] text-emerald-800 shadow-sm shadow-emerald-950/5 backdrop-blur">
@@ -122,6 +212,8 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen overflow-hidden bg-[#fff9eb] text-slate-950">
       <motion.div className="fixed left-0 right-0 top-0 z-[80] h-1 origin-left bg-gradient-to-r from-emerald-700 via-orange-500 to-lime-500" style={{ scaleX }} />
+      <HeritageRail side="left" />
+      <HeritageRail side="right" />
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/50 bg-[#fff9eb]/75 backdrop-blur-2xl">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8" aria-label="Primary navigation">
@@ -160,6 +252,9 @@ export default function LandingPage() {
       <main id="top">
         <section className="relative min-h-screen overflow-hidden px-5 pb-20 pt-32 md:px-8 md:pt-40">
           <GrainFieldBackground className="absolute inset-0 h-full w-full opacity-60" />
+          <HeritageWash className="opacity-100" />
+          <div className="heritage-edge-pattern absolute inset-x-0 top-28 h-20 opacity-65" aria-hidden="true" />
+          <div className="heritage-edge-pattern absolute inset-x-0 bottom-0 h-20 rotate-180 opacity-70" aria-hidden="true" />
           <div className="absolute left-1/2 top-0 h-[42rem] w-[42rem] -translate-x-1/2 rounded-full bg-lime-200/30 blur-3xl" />
           <div className="absolute -right-32 bottom-0 h-[30rem] w-[30rem] rounded-full bg-orange-200/50 blur-3xl" />
 
@@ -227,8 +322,11 @@ export default function LandingPage() {
             </motion.div>
           </div>
         </section>
+        <HeritageDivider />
 
-        <section id="product" className="relative px-5 py-24 md:px-8">
+        <section id="product" className="relative overflow-hidden px-5 py-24 md:px-8">
+          <HeritageWash className="opacity-55" />
+          <div className="heritage-corner-pattern absolute right-0 top-0 h-48 w-48 opacity-55" aria-hidden="true" />
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-10 lg:grid-cols-[0.8fr_1fr] lg:items-end">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}>
@@ -258,8 +356,11 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="relative bg-emerald-950 px-5 py-24 text-white md:px-8">
+        <section className="relative overflow-hidden bg-emerald-950 px-5 py-24 text-white md:px-8">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(249,115,22,0.22),transparent_28%),radial-gradient(circle_at_80%_50%,rgba(132,204,22,0.16),transparent_30%)]" />
+          <div className="absolute inset-0 opacity-[0.18] mix-blend-screen [background-image:radial-gradient(circle_at_center,#f97316_0_3px,transparent_4px),linear-gradient(135deg,transparent_0_42%,#facc15_43%_48%,transparent_49%),linear-gradient(45deg,transparent_0_42%,#14b8a6_43%_48%,transparent_49%)] [background-size:44px_44px,72px_72px,72px_72px]" aria-hidden="true" />
+          <div className="heritage-edge-pattern absolute inset-x-0 top-0 h-16 opacity-80" aria-hidden="true" />
+          <div className="heritage-edge-pattern absolute inset-x-0 bottom-0 h-16 rotate-180 opacity-80" aria-hidden="true" />
           <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.75fr_1fr] lg:items-center">
             <div>
               <SectionLabel>Food-to-food fortification</SectionLabel>
@@ -286,7 +387,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="nutrition" className="px-5 py-24 md:px-8">
+        <section id="nutrition" className="relative overflow-hidden px-5 py-24 md:px-8">
+          <div className="heritage-corner-pattern absolute left-0 top-4 h-56 w-56 scale-x-[-1] opacity-45" aria-hidden="true" />
           <div className="mx-auto max-w-7xl">
             <div className="mx-auto max-w-3xl text-center">
               <SectionLabel>Nutrition facts per 100 g</SectionLabel>
@@ -303,8 +405,9 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="prepare" className="relative px-5 py-24 md:px-8">
+        <section id="prepare" className="relative overflow-hidden px-5 py-24 md:px-8">
           <div className="absolute inset-x-0 top-20 h-96 bg-gradient-to-b from-orange-100/70 to-transparent" />
+          <HeritageWash className="opacity-50" />
           <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.95fr_1fr] lg:items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative rounded-[3rem] border border-emerald-900/10 bg-white p-6 shadow-2xl shadow-emerald-950/10">
               <img src={productImage} alt="MineVit pack showing instant porridge serving suggestion" className="mx-auto max-h-[42rem] w-full object-contain" />
@@ -324,8 +427,9 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="story" className="px-5 py-24 md:px-8">
-          <div className="mx-auto max-w-7xl rounded-[3rem] bg-white p-8 shadow-2xl shadow-emerald-950/10 md:p-12 lg:p-16">
+        <section id="story" className="relative overflow-hidden px-5 py-24 md:px-8">
+          <div className="heritage-edge-pattern absolute inset-x-0 top-0 h-16 opacity-50" aria-hidden="true" />
+          <div className="relative mx-auto max-w-7xl rounded-[3rem] border border-white/70 bg-white/90 p-8 shadow-2xl shadow-emerald-950/10 backdrop-blur md:p-12 lg:p-16">
             <div className="grid gap-12 lg:grid-cols-[1fr_0.9fr]">
               <div>
                 <SectionLabel>Our mission</SectionLabel>
